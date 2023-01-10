@@ -23,6 +23,7 @@ class GameFragment : Fragment() {
    private var _binding: FragmentGameBinding? = null
    private val binding by lazy { _binding!! }
    private val viewModel by viewModels<GameViewModel>()
+   private val viewModelQueriesGame by viewModels<GameQueriesViewModel>()
    private val gameAdapter = GameAdapter()
 
    override fun onCreateView(
@@ -36,12 +37,12 @@ class GameFragment : Fragment() {
    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
       super.onViewCreated(view, savedInstanceState)
       initRecyclerView()
-      viewModelInit()
+      requestApiData()
    }
 
-   private fun viewModelInit() {
+   private fun requestApiData() {
       lifecycleScope.launch {
-         viewModel.getGame(gameQueries())
+         viewModel.getGame(viewModelQueriesGame.gameQueries())
          viewModel.gameResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
                is NetworkResource.Loading -> {
@@ -75,14 +76,7 @@ class GameFragment : Fragment() {
       }
    }
 
-   private fun gameQueries(): HashMap<String, String> {
-      val queries: HashMap<String, String> = HashMap()
 
-      queries["platform"] = "pc"
-      queries["category"] = "mmorpg"
-
-      return queries
-   }
 
    override fun onDestroyView() {
       super.onDestroyView()

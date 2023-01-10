@@ -13,6 +13,6 @@ fun ImageView.load(url: String){
    Glide.with(context)
       .load(url)
       .centerCrop()
-      //.placeholder(R.drawable.ic_error)
+      .placeholder(R.drawable.ic_error)
       .into(this)
 }

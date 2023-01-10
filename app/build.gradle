@@ -69,4 +69,7 @@ dependencies {
 
     implementation Glide.glide
     implementation Glide.annotationProcessor
+
+    implementation Room.roomCompiler
+    implementation Room.room
 }
