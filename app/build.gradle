@@ -63,4 +63,10 @@ dependencies {
 
     implementation NavigationComponents.navigationFragment
     implementation NavigationComponents.navigationUi
+
+    implementation ShimmerRecyclerView.shimmer
+    implementation ShimmerRecyclerView.shimmerRecyclerview
+
+    implementation Glide.glide
+    implementation Glide.annotationProcessor
 }

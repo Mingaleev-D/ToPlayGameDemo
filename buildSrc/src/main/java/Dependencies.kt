@@ -39,6 +39,16 @@ object Versions {
    const val lottieAnimations = "3.4.2"
 
    const val navigationComponents = "2.5.3"
+
+   const val shimmerFaceVersion = "0.5.0"
+   const val shimmerRecyclerviewVersion = "0.4.1"
+
+}
+
+object ShimmerRecyclerView {
+
+   const val shimmer = "com.facebook.shimmer:shimmer:${Versions.shimmerFaceVersion}"
+   const val shimmerRecyclerview = "com.todkars:shimmer-recyclerview:${Versions.shimmerRecyclerviewVersion}"
 }
 
 object Deps {
