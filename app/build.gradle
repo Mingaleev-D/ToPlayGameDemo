@@ -63,4 +63,17 @@ dependencies {
 
     implementation NavigationComponents.navigationFragment
     implementation NavigationComponents.navigationUi
+
+    implementation ShimmerRecyclerView.shimmer
+    implementation ShimmerRecyclerView.shimmerRecyclerview
+
+    implementation Glide.glide
+    kapt Glide.annotationProcessor
+
+    implementation Room.room
+    implementation Room.roomRuntime
+    kapt Room.roomCompiler
+
+    implementation CoroutinesLifecycleScope.lifeCycleLivedata
+    kapt CoroutinesLifecycleScope.lifeCycleLivedataCompiler
 }
