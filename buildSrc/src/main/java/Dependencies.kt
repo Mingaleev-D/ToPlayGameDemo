@@ -99,6 +99,10 @@ object CoroutinesLifecycleScope {
       "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.coroutineLifecycleScope}"
    const val lifeCycleRuntime =
       "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.coroutineLifecycleScope}"
+   const val lifeCycleLivedata =
+      "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.coroutineLifecycleScope}"
+   const val lifeCycleLivedataCompiler =
+      "androidx.lifecycle:lifecycle-compiler:${Versions.coroutineLifecycleScope}"
 }
 
 object Glide {
@@ -120,6 +124,7 @@ object DaggerHilt {
 object Room {
    const val roomCompiler = "androidx.room:room-compiler:${Versions.roomVersion}"
    const val room = "androidx.room:room-ktx:${Versions.roomVersion}"
+   const val roomRuntime = "androidx.room:room-runtime:${Versions.roomVersion}"
 }
 
 object CircularProgressBar {

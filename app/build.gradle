@@ -68,8 +68,12 @@ dependencies {
     implementation ShimmerRecyclerView.shimmerRecyclerview
 
     implementation Glide.glide
-    implementation Glide.annotationProcessor
+    kapt Glide.annotationProcessor
 
-    implementation Room.roomCompiler
     implementation Room.room
+    implementation Room.roomRuntime
+    kapt Room.roomCompiler
+
+    implementation CoroutinesLifecycleScope.lifeCycleLivedata
+    kapt CoroutinesLifecycleScope.lifeCycleLivedataCompiler
 }

@@ -1,6 +1,7 @@
 package com.example.toplaygamedemo.ui.fragments.game
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.toplaygamedemo.R
 import com.example.toplaygamedemo.common.NetworkResource
+import com.example.toplaygamedemo.common.observeOnce
 import com.example.toplaygamedemo.databinding.FragmentGameBinding
 import com.example.toplaygamedemo.ui.fragments.game.adapter.GameAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,11 +36,28 @@ class GameFragment : Fragment() {
 
    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
       super.onViewCreated(view, savedInstanceState)
+
       initRecyclerView()
-      requestApiData()
+      readDatabase()
+   }
+
+   private fun readDatabase() {
+      lifecycleScope.launch {
+         viewModel.readGames.observeOnce(viewLifecycleOwner) { databaseGameEntity ->
+            if (databaseGameEntity.isNotEmpty()) {
+               Log.d("TAG", "readDatabase: called")
+               gameAdapter.differ.submitList(databaseGameEntity[0].gameEntity)
+               binding.rvAllGame.hideShimmer()
+            }else{
+               requestApiData()
+            }
+         }
+      }
+
    }
 
    private fun requestApiData() {
+      Log.d("TAG", "requestApiData: called")
       lifecycleScope.launch {
          viewModel.getGame(viewModelQueriesGame.gameQueries())
          viewModel.gameResponse.observe(viewLifecycleOwner) { response ->
@@ -57,6 +74,7 @@ class GameFragment : Fragment() {
                is NetworkResource.Error   -> {
                   binding.imageViewError.visibility = View.VISIBLE
                   binding.txtError.visibility = View.VISIBLE
+                  loadDataFromCache()
                   Toast.makeText(
                      requireContext(),
                      getString(R.string.no_internet_connected),
@@ -76,6 +94,15 @@ class GameFragment : Fragment() {
       }
    }
 
+   private fun loadDataFromCache() {
+     lifecycleScope.launch{
+        viewModel.readGames.observe(viewLifecycleOwner){ database ->
+           if(database.isNotEmpty()) {
+              gameAdapter.differ.submitList(database[0].gameEntity)
+           }
+        }
+     }
+   }
 
 
    override fun onDestroyView() {
