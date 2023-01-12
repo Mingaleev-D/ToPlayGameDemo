@@ -1,5 +1,6 @@
 package com.example.toplaygamedemo.repository
 
+import com.example.toplaygamedemo.data.datasource.LocalDataSource
 import com.example.toplaygamedemo.data.datasource.RemoteDataSource
 import javax.inject.Inject
 
@@ -9,8 +10,10 @@ import javax.inject.Inject
  */
 
 class GameRepository @Inject constructor(
-   remoteDataSource: RemoteDataSource
+   remoteDataSource: RemoteDataSource,
+   localDataSource: LocalDataSource
 ) {
 
    val remote = remoteDataSource
+   val local = localDataSource
 }
