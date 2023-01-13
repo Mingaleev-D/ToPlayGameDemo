@@ -9,10 +9,23 @@
         android:id="@+id/gameFragment"
         android:name="com.example.toplaygamedemo.ui.fragments.game.GameFragment"
         android:label="fragment_game"
-        tools:layout="@layout/fragment_game" />
+        tools:layout="@layout/fragment_game" >
+        <action
+            android:id="@+id/action_gameFragment_to_gameBottomSheetFragment"
+            app:destination="@id/gameBottomSheetFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.toplaygamedemo.ui.fragments.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
+    <dialog
+        android:id="@+id/gameBottomSheetFragment"
+        android:name="com.example.toplaygamedemo.ui.fragments.game.bottomsheet.GameBottomSheetFragment"
+        android:label="fragment_game_bottom_sheet"
+        tools:layout="@layout/fragment_game_bottom_sheet" >
+        <action
+            android:id="@+id/action_gameBottomSheetFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </dialog>
 </navigation>

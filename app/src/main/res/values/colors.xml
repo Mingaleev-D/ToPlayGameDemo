@@ -18,4 +18,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="error_red">#B71C1C</color>
+
+    //Chip color style
+    <color name="checkChipBackgroundColor">#a16296</color>
+    <color name="chipBackgroundColor">#f9f9f9</color>
+    <color name="checkedChipTextColor">#FF000000</color>
+    <color name="chipTextColor">#505151</color>
 </resources>

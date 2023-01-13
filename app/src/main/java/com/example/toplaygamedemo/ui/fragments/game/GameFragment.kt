@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.toplaygamedemo.R
 import com.example.toplaygamedemo.common.NetworkResource
 import com.example.toplaygamedemo.common.observeOnce
@@ -39,6 +40,10 @@ class GameFragment : Fragment() {
 
       initRecyclerView()
       readDatabase()
+
+      binding.floatingActionButton.setOnClickListener {
+         findNavController().navigate(R.id.action_gameFragment_to_gameBottomSheetFragment)
+      }
    }
 
    private fun readDatabase() {
