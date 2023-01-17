@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.toplaygamedemo.R
 import com.example.toplaygamedemo.common.NetworkResource
 import com.example.toplaygamedemo.common.observeOnce
@@ -26,6 +27,7 @@ class GameFragment : Fragment() {
    private val viewModel by viewModels<GameViewModel>()
    private val viewModelQueriesGame by viewModels<GameQueriesViewModel>()
    private val gameAdapter = GameAdapter()
+   private val args by navArgs<GameFragmentArgs>()
 
    override fun onCreateView(
       inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +51,7 @@ class GameFragment : Fragment() {
    private fun readDatabase() {
       lifecycleScope.launch {
          viewModel.readGames.observeOnce(viewLifecycleOwner) { databaseGameEntity ->
-            if (databaseGameEntity.isNotEmpty()) {
+            if (databaseGameEntity.isNotEmpty() && !args.backFromBottomSheeet) {
                Log.d("TAG", "readDatabase: called")
                gameAdapter.differ.submitList(databaseGameEntity[0].gameEntity)
                binding.rvAllGame.hideShimmer()

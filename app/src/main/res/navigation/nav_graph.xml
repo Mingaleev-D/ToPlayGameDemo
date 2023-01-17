@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_gameFragment_to_gameBottomSheetFragment"
             app:destination="@id/gameBottomSheetFragment" />
+        <argument
+            android:name="backFromBottomSheeet"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
