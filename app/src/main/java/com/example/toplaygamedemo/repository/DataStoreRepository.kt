@@ -13,6 +13,7 @@ import com.example.toplaygamedemo.common.Constants.CATEGORY_ID_PREFERENCES
 import com.example.toplaygamedemo.common.Constants.CATEGORY_PREFERENCES
 import com.example.toplaygamedemo.common.Constants.DEFAULT_CATEGORY
 import com.example.toplaygamedemo.common.Constants.DEFAULT_PLATFORM
+import com.example.toplaygamedemo.common.Constants.PREFERENCES_BACK_ONLINE
 import com.example.toplaygamedemo.common.Constants.PREFERENCES_NAME
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
@@ -38,6 +39,8 @@ class DataStoreRepository @Inject constructor(
       val selectedCategoryType = preferencesKey<String>(CATEGORY_PREFERENCES)
       val selectedCategoryTypeId = preferencesKey<Int>(CATEGORY_ID_PREFERENCES)
 
+      val backOnline = preferencesKey<Boolean>(PREFERENCES_BACK_ONLINE)
+
    }
 
    private val dataStore: DataStore<Preferences> = context.createDataStore(
@@ -55,6 +58,12 @@ class DataStoreRepository @Inject constructor(
          preferences[PreferenceKeys.selectedPlatformTypeId] = allPlatformId
          preferences[PreferenceKeys.selectedCategoryType] = categoryType
          preferences[PreferenceKeys.selectedCategoryTypeId] = categoryId
+      }
+   }
+
+   suspend fun saveBackOnline(backOnline: Boolean) {
+      dataStore.edit { preferences ->
+         preferences[PreferenceKeys.backOnline] = backOnline
       }
    }
 
@@ -79,6 +88,17 @@ class DataStoreRepository @Inject constructor(
             selectedCategoryId
          )
       }
+
+   val readBackOnline: Flow<Boolean> = dataStore.data.catch { exception ->
+      if (exception is IOException) {
+         emit(emptyPreferences())
+      } else {
+         throw exception
+      }
+   }.map {
+      val backOnline = it[PreferenceKeys.backOnline] ?: false
+      backOnline
+   }
 
 }
 

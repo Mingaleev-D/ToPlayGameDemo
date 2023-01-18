@@ -1,6 +1,7 @@
 package com.example.toplaygamedemo.ui.fragments.game
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.toplaygamedemo.common.Constants.DEFAULT_CATEGORY
 import com.example.toplaygamedemo.common.Constants.DEFAULT_PLATFORM
@@ -24,7 +25,11 @@ class GameQueriesViewModel @Inject constructor(
    private var gamePlatformType = DEFAULT_PLATFORM
    private var categoryType = DEFAULT_CATEGORY
 
+   var networkStatus = false
+   var backOnline = false
+
    val readGameType = dataStoreRepository.readAllPlatformAndCategoryType
+   val readBackOnline = dataStoreRepository.readBackOnline.asLiveData()
 
    fun saveGameType(
       allPlatformType: String,
@@ -38,6 +43,12 @@ class GameQueriesViewModel @Inject constructor(
          categoryType,
          categoryId
       )
+   }
+
+   fun saveBackOnline(backOnline:Boolean){
+      viewModelScope.launch {
+         dataStoreRepository.saveBackOnline(backOnline)
+      }
    }
 
    fun gameQueries(): HashMap<String, String> {
@@ -54,5 +65,15 @@ class GameQueriesViewModel @Inject constructor(
       queries[QUERY_CATEGORY] = categoryType
 
       return queries
+   }
+
+   fun showNetworkStatus(){
+      if(!networkStatus){
+         saveBackOnline(true)
+      }else if(networkStatus){
+         if(backOnline){
+            saveBackOnline(false)
+         }
+      }
    }
 }

@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.toplaygamedemo.R
+import com.example.toplaygamedemo.common.NetworkListener
 import com.example.toplaygamedemo.common.NetworkResource
 import com.example.toplaygamedemo.common.observeOnce
 import com.example.toplaygamedemo.databinding.FragmentGameBinding
@@ -28,6 +29,7 @@ class GameFragment : Fragment() {
    private val viewModelQueriesGame by viewModels<GameQueriesViewModel>()
    private val gameAdapter = GameAdapter()
    private val args by navArgs<GameFragmentArgs>()
+   private lateinit var networkListener: NetworkListener
 
    override fun onCreateView(
       inflater: LayoutInflater, container: ViewGroup?,
@@ -41,10 +43,28 @@ class GameFragment : Fragment() {
       super.onViewCreated(view, savedInstanceState)
 
       initRecyclerView()
-      readDatabase()
+      viewModelQueriesGame.readBackOnline.observe(viewLifecycleOwner){
+         viewModelQueriesGame.backOnline = it
+      }
+
+     lifecycleScope.launch {
+        networkListener = NetworkListener()
+        networkListener.checkNetworkAvailability(requireContext()).collect { status ->
+           Log.d("TAG", "onViewCreated networkListener: $status")
+           viewModelQueriesGame.networkStatus = status
+           viewModelQueriesGame.showNetworkStatus()
+           readDatabase()
+        }
+     }
 
       binding.floatingActionButton.setOnClickListener {
-         findNavController().navigate(R.id.action_gameFragment_to_gameBottomSheetFragment)
+         if(viewModelQueriesGame.networkStatus){
+            findNavController().navigate(R.id.action_gameFragment_to_gameBottomSheetFragment)
+         }else{
+            Toast.makeText(requireContext(), "No internet connection", Toast.LENGTH_SHORT).show()
+            viewModelQueriesGame.showNetworkStatus()
+         }
+
       }
    }
 
@@ -55,7 +75,7 @@ class GameFragment : Fragment() {
                Log.d("TAG", "readDatabase: called")
                gameAdapter.differ.submitList(databaseGameEntity[0].gameEntity)
                binding.rvAllGame.hideShimmer()
-            }else{
+            } else {
                requestApiData()
             }
          }
@@ -79,6 +99,7 @@ class GameFragment : Fragment() {
                   }
                }
                is NetworkResource.Error   -> {
+                  binding.rvAllGame.hideShimmer()
                   binding.imageViewError.visibility = View.VISIBLE
                   binding.txtError.visibility = View.VISIBLE
                   loadDataFromCache()
@@ -102,13 +123,13 @@ class GameFragment : Fragment() {
    }
 
    private fun loadDataFromCache() {
-     lifecycleScope.launch{
-        viewModel.readGames.observe(viewLifecycleOwner){ database ->
-           if(database.isNotEmpty()) {
-              gameAdapter.differ.submitList(database[0].gameEntity)
-           }
-        }
-     }
+      lifecycleScope.launch {
+         viewModel.readGames.observe(viewLifecycleOwner) { database ->
+            if (database.isNotEmpty()) {
+               gameAdapter.differ.submitList(database[0].gameEntity)
+            }
+         }
+      }
    }
 
 
