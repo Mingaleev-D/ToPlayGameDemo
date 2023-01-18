@@ -36,4 +36,6 @@ object Constants {
    //ROOM DATABASE
    const val DATABASE_NAME = "game_database"
    const val DATABASE_TABLE = "game_table"
+
+   const val PREFERENCES_BACK_ONLINE = "backOnline"
 }
